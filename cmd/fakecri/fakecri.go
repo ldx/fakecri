@@ -19,6 +19,7 @@ var (
 )
 
 func main() {
+	klog.InitFlags(nil)
 	flag.Parse()
 
 	if *version {
@@ -36,14 +37,18 @@ func main() {
 		klog.Fatalf("Failed to init runtime service %v.", err)
 	}
 	runtimeInfo, err := runtimeService.Status()
-	klog.Infof("%v %v", runtimeInfo, err)
+	klog.V(4).Infof("%v %v", runtimeInfo, err)
 
 	remoteImageService, err := remote.NewRemoteImageService(*remoteEndpoint, 15*time.Second)
 	if err != nil {
 		klog.Fatalf("Failed to init image service %v.", err)
 	}
 	imageServiceInfo, err := remoteImageService.ImageFsInfo()
-	klog.Infof("%v %v", imageServiceInfo, err)
+	klog.V(4).Infof("%v %v", imageServiceInfo, err)
 
-	time.Sleep(10 * time.Second)
+	klog.Infof("listening on %s", *remoteEndpoint)
+
+	for {
+		time.Sleep(1 * time.Hour)
+	}
 }
