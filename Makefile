@@ -32,7 +32,7 @@ else
 IMAGE_DEV_OR_LATEST=latest
 endif
 
-img: $(BINARIES)
+img: $(BINARIES) $(GIT_VERSION)
 	@echo "Checking if IMAGE_TAG is set" && test -n "$(IMAGE_TAG)"
 	$(DKR) build -t $(REGISTRY_REPO):$(IMAGE_TAG) \
 		-t $(REGISTRY_REPO):$(IMAGE_DEV_OR_LATEST) .
