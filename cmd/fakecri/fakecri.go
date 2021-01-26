@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"os"
 	"time"
 
 	"k8s.io/klog"
@@ -10,10 +12,20 @@ import (
 )
 
 var (
+	BuildVersion   = "N/A"
+	BuildTime      = "N/A"
 	remoteEndpoint = flag.String("remote-endpoint", "unix:///tmp/fakecri.sock", "The endpoint to start listening on")
+	version        = flag.Bool("version", false, "Show version")
 )
 
 func main() {
+	flag.Parse()
+
+	if *version {
+		fmt.Printf("%s version %s built on %s\n", os.Args[0], BuildVersion, BuildTime)
+		os.Exit(0)
+	}
+
 	fakeRemoteRuntime := fakeremote.NewFakeRemoteRuntime()
 	if err := fakeRemoteRuntime.Start(*remoteEndpoint); err != nil {
 		klog.Fatalf("Failed to start fake runtime %v.", err)
